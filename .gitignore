@@ -1,0 +1,45 @@
+# ##########################################
+# Compiled Binaries and Architecture Outputs
+# ##########################################
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+/[A-Za-z0-9_-]*
+
+# ##########################################
+# Test Artifacts and Coverage
+# ##########################################
+*.test
+*.out
+*.coverprofile
+profile.cov
+
+# ##########################################
+# Dependencies
+# ##########################################
+
+# ##########################################
+# Workspaces and Local Configurations
+# ##########################################
+# Go 1.18+ multi-module workspace file (usually kept local)
+go.work
+go.work.sum
+
+# Environment variables containing sensitive keys
+.env
+.env.local
+
+# ##########################################
+# IDEs and System Files
+# ##########################################
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
