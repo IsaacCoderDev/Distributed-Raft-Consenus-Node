@@ -9,7 +9,6 @@ option go_package = "github.com/quant/raft-go/proto;raft";
 // ============================================================================
 service RaftService {
   rpc RequestVote(VoteRequest) returns (VoteResponse);
-  
   rpc AppendEntries(AppendRequest) returns (AppendResponse);
 }
 
@@ -44,10 +43,8 @@ message VoteResponse {
 message AppendRequest {
   uint64 term = 1;
   uint32 leader_id = 2;
-  
-  uint64 prev_log_index = 3; 
-  uint64 prev_log_term = 4;  
-  
+  uint64 prev_log_index = 3;
+  uint64 prev_log_term = 4;
   repeated LogEntry entries = 5;
   uint64 leader_commit = 6;
 }
@@ -55,7 +52,6 @@ message AppendRequest {
 message AppendResponse {
   uint64 term = 1;
   bool success = 2;
-  
   // --------------------------------------------------------------------------
   // FAST BACKTRACKING OPTIMIZATION (Section 5.3 of the Raft Paper)
   // Standard Raft rejects logs one-by-one, which is disastrous over high-latency 

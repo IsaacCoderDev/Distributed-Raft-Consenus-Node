@@ -12,7 +12,6 @@ const (
 	Leader
 )
 
-// Wrapper structs to pass gRPC requests into the single-threaded event loop
 type voteMsg struct {
 	req  *pb.VoteRequest
 	resp chan *pb.VoteResponse
@@ -24,23 +23,18 @@ type appendMsg struct {
 }
 
 type RaftNode struct {
-	id    uint32
-	state NodeState
-
-	// Persistent State (Must be written to disk before responding to RPCs)
+	id          uint32
+	state       NodeState
 	currentTerm uint64
 	votedFor    uint32
 	log         []*pb.LogEntry
 
-	// Volatile State
 	commitIndex uint64
 	lastApplied uint64
 
-	// Channels for routing network traffic to the event loop
 	voteCh   chan voteMsg
 	appendCh chan appendMsg
 
-	// Control channels
 	shutdownCh chan struct{}
 }
 
