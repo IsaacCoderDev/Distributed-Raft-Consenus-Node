@@ -52,5 +52,31 @@ func (n *RaftNode) handleAppendEntries(req *pb.AppendRequest) *pb.AppendResponse
 		// n.applyCh <- struct{}{}
 	}
 
+	stateChanged := false
+	if req.Term > n.currentTerm {
+		n.currentTerm = req.Term
+		n.votedFor = 0
+		stateChanged = true
+	}
+
+	for i, entry := range req.Entries {
+		logIndex := req.PrevLogIndex + 1 + uint64(i)
+
+		if uint64(len(n.log)) > logIndex {
+			if n.log[logIndex].Term != entry.Term {
+				n.log = n.log[:logIndex]
+				n.log = append(n.log, entry)
+				n.wal.AppendLog(entry)
+			}
+		} else {
+			n.log = append(n.log, entry)
+			n.wal.AppendLog(entry)
+		}
+	}
+
+	if stateChanged {
+		n.wal.PersistState(n.currentTerm, n.votedFor)
+	}
+
 	return &pb.AppendResponse{Term: n.currentTerm, Success: true}
 }
