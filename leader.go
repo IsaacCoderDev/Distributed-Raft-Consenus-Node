@@ -48,3 +48,13 @@ func (n *RaftNode) broadcastAppendEntries() {
 		}(peerID)
 	}
 }
+
+func (n *RaftNode) applyCommittedLogs() {
+
+	for n.commitIndex > n.lastApplied {
+		n.lastApplied++
+		entry := n.log[n.lastApplied]
+
+		n.applyCh <- entry
+	}
+}

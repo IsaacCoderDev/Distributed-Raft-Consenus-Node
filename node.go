@@ -34,6 +34,7 @@ type RaftNode struct {
 
 	voteCh   chan voteMsg
 	appendCh chan appendMsg
+	applyCh  chan *pb.LogEntry
 
 	shutdownCh chan struct{}
 }

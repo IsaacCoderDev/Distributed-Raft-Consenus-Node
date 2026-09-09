@@ -80,3 +80,13 @@ func (n *RaftNode) handleAppendEntries(req *pb.AppendRequest) *pb.AppendResponse
 
 	return &pb.AppendResponse{Term: n.currentTerm, Success: true}
 }
+
+func (n *RaftNode) applyCommittedLogs() {
+
+	for n.commitIndex > n.lastApplied {
+		n.lastApplied++
+		entry := n.log[n.lastApplied]
+
+		n.applyCh <- entry
+	}
+}
